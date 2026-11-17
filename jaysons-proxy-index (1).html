@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jaysons Proxy</title>
+<style>
+:root{color-scheme:dark;--accent:#8b7cff}*{box-sizing:border-box}
+body{margin:0;min-height:100vh;font-family:system-ui,sans-serif;color:#f5f6ff;background:radial-gradient(ellipse at top,#27315c,#11182d 55%,#0b1020);background-position:center;background-size:cover;background-attachment:fixed}
+body.custom{background-image:linear-gradient(#080b18a8,#080b18a8),var(--custom-bg)}
+main{width:min(850px,92vw);margin:auto;padding:10vh 0 48px;text-align:center}
+.tag{color:#c5beff;letter-spacing:.22em;font-size:.75rem;font-weight:700}
+h1{font-size:clamp(2.5rem,8vw,4.5rem);margin:.55rem 0 .4rem}
+.sub{color:#e0e5f6;margin:0 0 1.5rem}
+form{display:flex;gap:10px;padding:9px;background:white;border-radius:16px;box-shadow:0 18px 55px #0008}
+input[type=search]{flex:1;min-width:0;border:0;outline:0;padding:12px 14px;font-size:1rem;color:#17203a}
+button,.upload{border:0;border-radius:11px;padding:11px 17px;font-weight:700;color:white;background:var(--accent);cursor:pointer;font:inherit}
+.tools{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin:18px 0}
+#backgroundUpload{position:absolute;width:1px;height:1px;opacity:0}
+#clear{background:#303a55}#status{font-size:.85rem;color:#f1efff}
+h2{margin:3rem 0 1rem;font-size:1rem}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}
+.links a{color:white;text-decoration:none;background:#11182dcc;border:1px solid #ffffff35;border-radius:14px;padding:18px 12px;backdrop-filter:blur(8px)}
+.links span{display:block;color:#c0c8df;font-size:.8rem;margin-top:5px}
+footer{margin-top:3rem;color:#eef0ff;font-size:.78rem;line-height:1.6}
+</style></head>
+<body><main>
+<div class="tag">YOUR PERSONAL WEB PORTAL</div><h1>Jaysons Proxy</h1><p class="sub">A simple place to start your web browsing.</p>
+<form action="https://www.google.com/search" method="get"><input name="q" type="search" placeholder="Search the web…" aria-label="Search the web" required><button>Search</button></form>
+<div class="tools"><label class="upload" for="backgroundUpload">⬆ Upload a background</label><input id="backgroundUpload" type="file" accept="image/*"><button id="clear" type="button">Reset background</button><span id="status" role="status">Choose an image from your device.</span></div>
+<h2>QUICK LINKS</h2><nav class="links" aria-label="Quick links">
+<a href="https://www.google.com/">Google<span>Search</span></a><a href="https://www.wikipedia.org/">Wikipedia<span>Knowledge</span></a><a href="https://www.khanacademy.org/">Khan Academy<span>Learning</span></a><a href="https://www.youtube.com/">YouTube<span>Videos</span></a>
+</nav><footer>Your uploaded background is saved only in this browser on this device.<br>This is a personal start page, not a tool for bypassing school network restrictions.</footer>
+</main>
+<script>
+const picker=document.getElementById('backgroundUpload'),status=document.getElementById('status');
+function apply(data){document.body.style.setProperty('--custom-bg',`url("${data}")`);document.body.classList.add('custom')}
+try{const saved=localStorage.getItem('jaysonsProxyBackground');if(saved){apply(saved);status.textContent='Your saved background is loaded.'}}catch{}
+picker.addEventListener('change',()=>{const file=picker.files&&picker.files[0];if(!file)return;
+if(!file.type.startsWith('image/')){status.textContent='Please choose an image file.';return}
+if(file.size>4*1024*1024){status.textContent='Choose an image under 4 MB.';picker.value='';return}
+const reader=new FileReader();reader.onload=()=>{apply(reader.result);try{localStorage.setItem('jaysonsProxyBackground',reader.result);status.textContent='Background uploaded and saved on this device!'}catch{status.textContent='Background applied, but could not be saved.'}};reader.onerror=()=>status.textContent='Could not read that image. Try another.';reader.readAsDataURL(file)});
+document.getElementById('clear').addEventListener('click',()=>{document.body.classList.remove('custom');document.body.style.removeProperty('--custom-bg');try{localStorage.removeItem('jaysonsProxyBackground')}catch{}picker.value='';status.textContent='Default background restored.'});
+</script></body></html>
